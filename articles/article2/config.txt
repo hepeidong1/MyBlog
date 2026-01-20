@@ -10,4 +10,4 @@ type: journal
 year: 2026/2
 pdf_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article2/2.pdf
 code_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article2/SiMlDCS_CODE.zip
-supplementary_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article2/Supplementary Material (AMMOD-D-25-02519 R1).docx
+supplementary_url: #
