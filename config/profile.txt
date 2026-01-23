@@ -2,8 +2,8 @@ name: Peidong He
 introduction: Hello! I am a student at Xi'an University of Technology, mainly engaged in research on mathematics.
 
 My research interests include optimization algorithm, path planning, and UAV swarm control. This blog aims to share my research results, and related resources, hoping to communicate and cooperate with fellow scholars.
-email: 125091008@stu.xaut.edu.cn
+email: 1250910008@stu.xaut.edu.cn
 wechat: 15650528028
 qq: 3140636926
-github: [hepeidong1 (贺培东)](https://github.com/hepeidong1)
-researchgate: [Peidong He](https://www.researchgate.net/profile/Peidong-He-5?ev=hdr_xprf)
+github: https://github.com/hepeidong1
+researchgate: https://www.researchgate.net/profile/Peidong-He-5?ev=hdr_xprf

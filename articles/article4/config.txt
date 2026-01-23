@@ -7,4 +7,4 @@ type: journal
 year: 2026
 pdf_url: #
 code_url: #
-supplementary_url: #
+supplementary_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/SM.mp4
