@@ -275,7 +275,7 @@
                 <!-- Left Section: Avatar and Contact Information -->
                 <div class="left-section">
                     <div class="personal-avatar">
-                        <img src="https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/config/tx.jpg" alt="Personal Avatar">
+                        <img src="/config/tx.jpg" alt="Personal Avatar">
                     </div>
                     <div class="contact-info" id="contact-info">
                         <!-- Contact information will be loaded from config file via JavaScript -->
@@ -306,7 +306,7 @@
         function parseProfileTxt(content) {
             const profile = {
                 name: "[Your Name]",
-                introduction: "Hello! I am a Ph.D. student at Xi'an University of Technology, mainly engaged in research on [Research Direction].\n\nMy research interests include [Research Interest 1], [Research Interest 2], and [Research Interest 3]. This blog aims to share my research results, learning experiences, and related resources, hoping to communicate and cooperate with fellow scholars.",
+                introduction: "",
                 email: "your.email@example.com",
                 wechat: "[Your WeChat]",
                 qq: "[Your QQ]",
@@ -316,25 +316,47 @@
             
             // Handle both Windows (CRLF) and Unix (LF) line endings
             const lines = content.split(/\r?\n/);
+            
             let currentKey = null;
-            let currentValue = '';
+            let inIntroduction = false;
             
             lines.forEach(line => {
                 line = line.trim();
-                if (line.includes(':')) {
-                    if (currentKey) {
-                        profile[currentKey] = currentValue.trim();
+                
+                // Check if this line starts with a key:value pair
+                if (line.includes(':') && !inIntroduction) {
+                    const colonIndex = line.indexOf(':');
+                    const key = line.substring(0, colonIndex).trim();
+                    const value = line.substring(colonIndex + 1).trim();
+                    
+                    // Set the key-value pair
+                    profile[key] = value;
+                    currentKey = key;
+                    
+                    // If this is the introduction, start collecting multi-line content
+                    if (key === 'introduction') {
+                        inIntroduction = true;
                     }
-                    const parts = line.split(':', 2);
-                    currentKey = parts[0].trim();
-                    currentValue = parts[1].trim();
-                } else if (line && currentKey) {
-                    currentValue += '\n' + line;
+                } 
+                // If we're in the introduction and this line doesn't start with another key, append it
+                else if (inIntroduction && line && !line.includes(':')) {
+                    profile.introduction += '\n' + line;
+                }
+                // If this line starts with another key and we're in introduction, exit introduction mode
+                else if (inIntroduction && line.includes(':')) {
+                    inIntroduction = false;
+                    // Process this new key-value pair
+                    const colonIndex = line.indexOf(':');
+                    const key = line.substring(0, colonIndex).trim();
+                    const value = line.substring(colonIndex + 1).trim();
+                    profile[key] = value;
+                    currentKey = key;
                 }
             });
             
-            if (currentKey) {
-                profile[currentKey] = currentValue.trim();
+            // Clean up empty introduction if no value was set
+            if (!profile.introduction.trim()) {
+                profile.introduction = "Hello! I am a Ph.D. student at Xi'an University of Technology, mainly engaged in research on [Research Direction].\n\nMy research interests include [Research Interest 1], [Research Interest 2], and [Research Interest 3]. This blog aims to share my research results, learning experiences, and related resources, hoping to communicate and cooperate with fellow scholars.";
             }
             
             return profile;
@@ -372,6 +394,8 @@
         
         // Display personal information
         function displayProfileData(profile) {
+            console.log('Profile data:', profile); // Debug log to check URLs
+            
             // Display right part: Personal information
             const personalDetails = document.getElementById('personal-details');
             personalDetails.innerHTML = `
