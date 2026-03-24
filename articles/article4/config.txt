@@ -7,5 +7,5 @@ abstract: Autonomous robot path planning technologies have several problems. The
 type: journal
 year: 2026
 pdf_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/4.pdf
-code_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/CODE.zip
+code_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/code.zip
 supplementary_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/SM.mp4
