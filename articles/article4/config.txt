@@ -5,6 +5,6 @@ journal: Code_and_video_will_be_uploaded_shortly.
 abstract: Code_and_video_will_be_uploaded_shortly.
 type: journal
 year: 2026
-pdf_url: #
+pdf_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/4.pdf
 code_url: #
 supplementary_url: https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/SM.mp4
