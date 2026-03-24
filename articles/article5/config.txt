@@ -1,6 +1,6 @@
 id: paper5
-title: [hello]
-authors: Author 1, Author 2, Author 3*
+title: [shi jia zhi jue chang]
+authors: Xuerui Shi, Yang Li, Peidong He*
 journal: Conference Name 3, Location 3, Year 2023
 abstract: Abstract: [Paper Abstract Content for Conference 3]
 type: journal
