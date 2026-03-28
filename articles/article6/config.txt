@@ -1,12 +1,12 @@
 id: paper6
-title: HAURRT*-Smart-v2: An RRT Algorithm with Dynamic Local Structure Modification for Global Real-Time Guidance
+title: HAURRT*smart-v2: An RRT Algorithm with Dynamic Local Structure Modification for Global Real-Time Guidance
 authors: Test Author 1, Test Author 2, Test Author 3*
 journal: Test Journal, Volume(Issue): Page Range, 2024
 abstract: Abstract: This is a test paper abstract.
 The research proposes test contributions, uses test methods, and experimental results show test conclusions.
 type: journal
 year: 2024
-pdf_url: articles/article1/1.pdf
+pdf_url: #
 code_url: #
 dataset_url: #
 supplementary_url: #
