@@ -1,10 +1,10 @@
 id: paper5
-title: [Visual Expansion Dynamics Based APF Method — Predictive Obstacle Avoidance Navigation with Double-Loop ADRC]
-authors: Xuerui Shi, Yang Li, Peidong He*
-journal: Conference Name 3, Location 3, Year 2023
+title: [VEAPF: A Purely Visual Navigation Integrating Multi-Visual Features into the Traditional Obstacle Avoidance Framework]
+authors: Peidong He, Gang Hu∗, Guo Wei, Bin Shu, Jialing Yan
+journal: Supplementary Materials will be uploaded shortly.
 abstract: Abstract: [Paper Abstract Content for Conference 3]
 type: journal
-year: 2023
+year: 2026
 pdf_url: #
 code_url: #
 supplementary_url: #
