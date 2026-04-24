@@ -9,6 +9,7 @@ const SITE_DATA = {
       "Optimization Algorithm",
       "Path Planning",
       "UAV Swarm Control",
+      "Particle Swarm Optimization",
       "Formation Control",
       "Distributed System"
     ],
@@ -148,8 +149,8 @@ const SITE_DATA = {
         "DOI": "10.1016/j.apm.2025.116239",
         "Abstract": "This paper proposes a path planning method for large-scale, low-cost military UAVs, addressing system design, path planning algorithms, and UAV safety guarantee. We implement a distributed formation control system and construct behavior-based formation coordination control methods through quantified UAV interactions."
       }
-    }
-     {
+    },
+    {
       "title": "HAURRT*smart: A rapidly exploring pseudo-random tree algorithm with low redundancy",
       "authors": "Peidong He, Gang Hu, Essam H. Houssein, Guo Wei",
       "venue": "Aerospace Science and Technology",
