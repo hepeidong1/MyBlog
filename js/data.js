@@ -150,6 +150,38 @@ const SITE_DATA = {
         "Abstract": "This paper proposes a path planning method for large-scale, low-cost military UAVs, addressing system design, path planning algorithms, and UAV safety guarantee. We implement a distributed formation control system and construct behavior-based formation coordination control methods through quantified UAV interactions."
       }
     }
+     {
+      "title": "HAURRT*smart: A rapidly exploring pseudo-random tree algorithm with low redundancy",
+      "authors": "Peidong He, Gang Hu, Essam H. Houssein, Guo Wei",
+      "venue": "Aerospace Science and Technology",
+      "venueType": "journal",
+      "venueAbbr": "AST",
+      "year": "2026",
+      "doi": "10.1016/j.ast.2026.111868",
+      "links": {
+        "PDF": "https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/4.pdf",
+        "Code": "https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/code.zip",
+        "Supplementary": "https://github.com/hepeidong1/MyBlog/raw/refs/heads/main/articles/article4/SM.mp4"
+      },
+      "details": {
+        "Journal": "Aerospace Science and Technology, 176 (2026) 111868",
+        "DOI": "10.1016/j.ast.2026.111868",
+        "Abstract": "Autonomous robot path planning technologies have several problems. They can be slow, often use too many nodes, and struggle to adapt to complex environments, especially when using random sampling algorithms. Traditional Rapidly-exploring Random Tree (RRT) algorithms rely on random sampling and fixed stride lengths. This limits their ability to navigate complicated spaces and narrow passages effectively. This paper proposes the HAURRT*smart algorithm, which features four key improvements. First, we use Halton sequences for uniform sampling, eliminating node redundancy and step size dependence. By adding a state marker, our sampling strategy fully inherits the three major advantages of Halton sequences. Second, we add a dynamically adjusted target bias probability to balance exploration and exploitation for faster convergence. Third, the uniform node chain extension strategy addresses sparsity from long-distance node expansion, promoting compact connections. Finally, local branch pruning and reconnection, guided by the triangle inequality, optimize the final path and improve smoothness by eliminating redundant nodes in reverse order."
+      }
+    },
+    {
+      "title": "VEAPF: A Purely Visual Navigation Integrating Multi-Visual Features into the Traditional Obstacle Avoidance Framework",
+      "authors": "Peidong He, Gang Hu, Guo Wei, Bin Shu, Jialing Yan",
+      "venue": "Under Review",
+      "venueType": "journal",
+      "venueAbbr": "Preprint",
+      "year": "2026",
+      "status": "Under Review",
+      "links": {},
+      "details": {
+        "Abstract": "Supplementary Materials will be uploaded shortly."
+      }
+    }
   ],
   "projects": [
     {
