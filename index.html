@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peidong He - Personal Homepage</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- 简历主体 -->
+    <main class="cv-layout" style="margin-top:0">
+
+        <!-- ===== 左侧边栏 ===== -->
+        <aside class="cv-sidebar">
+
+            <!-- 头像 + 姓名（JS 填充） -->
+            <div class="profile-block">
+                <div class="profile-avatar">
+                    <img src="tx.jpg" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:11px;">
+                </div>
+                <h1 class="profile-name" id="profileName"></h1>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Basic Info -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-heading">Basic Info</h2>
+                <ul class="info-list" id="infoList"></ul>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <!-- Contact -->
+            <div class="sidebar-section">
+                <h2 class="sidebar-heading">Contact</h2>
+                <ul class="contact-list" id="contactList"></ul>
+            </div>
+
+        </aside>
+
+        <!-- ===== 右侧主内容 ===== -->
+        <div class="cv-main">
+
+            <!-- About -->
+            <section class="cv-section">
+                <h2 class="cv-section-title">About Me</h2>
+                <p class="bio-text" id="profileBio"></p>
+                <div class="project-tags" style="margin-top:.5rem" id="profileTags"></div>
+            </section>
+
+            <!-- News -->
+            <section class="cv-section" id="news-diary">
+                <h2 class="cv-section-title">News</h2>
+                <div class="diary-list" id="diaryList"></div>
+                <button class="pub-toggle-btn" id="diaryToggleBtn" style="display:none">Show All News</button>
+                <div class="pager" id="diaryPager" style="display:none"></div>
+            </section>
+
+            <!-- Publications -->
+            <section class="cv-section">
+                <h2 class="cv-section-title">Publications</h2>
+                <div class="pub-list" id="pubList"></div>
+                <button class="pub-toggle-btn" id="pubToggleBtn" style="display:none">Show All Publications</button>
+                <div class="pager" id="pubPager" style="display:none"></div>
+            </section>
+
+            <!-- Projects -->
+            <section class="cv-section">
+                <h2 class="cv-section-title">Projects</h2>
+                <div class="project-list" id="projectList"></div>
+                <button class="pub-toggle-btn" id="projToggleBtn" style="display:none">Show All Projects</button>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span>© 2026 <span id="footerName"></span> · Personal Homepage</span>
+            <div class="footer-socials" id="footerSocials"></div>
+        </div>
+    </footer>
+
+    <!-- 二维码弹出层 -->
+    <div class="qr-overlay" id="qrOverlay" onclick="closeQR()">
+        <div class="qr-card" onclick="event.stopPropagation()">
+            <p class="qr-title" id="qrTitle"></p>
+            <img id="qrImg" src="" alt="二维码"
+                 onerror="this.style.display='none'; document.getElementById('qrPlaceholder').style.display='flex';">
+            <div class="qr-placeholder" id="qrPlaceholder" style="display:none;">
+                <i class="fas fa-qrcode"></i>
+                <span id="qrLabel"></span>
+            </div>
+            <p class="qr-hint">Click outside to close</p>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+    /* ── 标签 → CSS class ── */
+    const tagClassMap = { 'Paper': 'tag-paper', 'Open Source': 'tag-open', 'Thought': 'tag-think', 'Share': 'tag-share', 'Event': 'tag-event' };
+
+    /* ── 填充个人信息 ── */
+    (function renderProfile() {
+        const p = SITE_DATA.profile;
+        document.getElementById('profileName').textContent = p.name;
+        document.getElementById('profileBio').textContent = p.bio;
+        document.getElementById('footerName').textContent = p.name;
+
+        // 基本信息
+        const infoList = document.getElementById('infoList');
+        p.info.forEach(item => {
+            const li = document.createElement('li');
+            li.innerHTML = '<i class="' + item.icon + '"></i><div><span class="info-label">' + item.label + '</span><span class="info-val">' + item.value + '</span></div>';
+            infoList.appendChild(li);
+        });
+
+        // 联系方式
+        const contactList = document.getElementById('contactList');
+        p.contacts.forEach(c => {
+            const li = document.createElement('li');
+            if (c.type === 'link') {
+                li.innerHTML = '<a href="' + c.href + '" target="_blank"><i class="' + c.icon + '"></i><span>' + c.name + '</span></a>';
+            } else if (c.type === 'qr') {
+                li.innerHTML = '<a href="javascript:void(0)" onclick="toggleQR(\'' + c.qrType + '\')"><i class="' + c.icon + '"></i><span>' + c.name + '</span></a>';
+            }
+            contactList.appendChild(li);
+        });
+
+        // 页脚社交
+        const footerSocials = document.getElementById('footerSocials');
+        p.contacts.forEach(c => {
+            const a = document.createElement('a');
+            a.title = c.name;
+            a.innerHTML = '<i class="' + c.icon + '"></i>';
+            if (c.type === 'link') {
+                a.href = c.href;
+                a.target = '_blank';
+            } else if (c.type === 'qr') {
+                a.href = 'javascript:void(0)';
+                a.onclick = function() { toggleQR(c.qrType); };
+            }
+            footerSocials.appendChild(a);
+        });
+
+        // 标签
+        const tagsEl = document.getElementById('profileTags');
+        p.tags.forEach(tag => {
+            const span = document.createElement('span');
+            span.textContent = tag;
+            tagsEl.appendChild(span);
+        });
+    })();
+
+    /* ── 渲染动态 ── */
+    (function renderDiary() {
+        const container = document.getElementById('diaryList');
+        const diaries = SITE_DATA.diary;
+        diaries.forEach((d, i) => {
+            const entry = document.createElement('div');
+            entry.className = 'diary-entry' + (i >= 3 ? ' diary-hidden' : '');
+            entry.setAttribute('data-date', d.date);
+            entry.setAttribute('data-tag', d.tag);
+
+            const tagClass = tagClassMap[d.tag] || 'tag-share';
+            const bodyHtml = d.body.split('\n\n').map(p => {
+                if (p.startsWith('- ')) {
+                    const items = p.split('\n').map(li => '<li>' + li.replace(/^- /, '') + '</li>').join('');
+                    return '<ul>' + items + '</ul>';
+                }
+                return '<p>' + p.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') + '</p>';
+            }).join('');
+
+            entry.innerHTML =
+                '<div class="diary-header" onclick="toggleEntry(this)">' +
+                    '<span class="diary-dot"></span>' +
+                    '<span class="diary-tag ' + tagClass + '">' + d.tag + '</span>' +
+                    '<span class="diary-time" data-date="' + d.date + '"></span>' +
+                    '<span class="diary-title">' + d.title + '</span>' +
+                    '<i class="fas fa-chevron-down diary-arrow"></i>' +
+                '</div>' +
+                '<div class="diary-body">' + bodyHtml + '</div>';
+            container.appendChild(entry);
+        });
+
+        // 填充相对时间
+        document.querySelectorAll('.diary-time[data-date]').forEach(el => {
+            el.textContent = relativeDate(el.dataset.date);
+        });
+
+        // 初始化分页
+        if (diaries.length > 3) {
+            const btn = document.getElementById('diaryToggleBtn');
+            const hiddenCount = diaries.length - 3;
+            btn.textContent = 'Show All News (' + hiddenCount + ')';
+            btn.style.display = '';
+            initPager('#diaryList', '#diaryPager', 'diaryToggleBtn', 10);
+        }
+    })();
+
+    /* ── 渲染论文 ── */
+    (function renderPublications() {
+        const container = document.getElementById('pubList');
+        const pubs = SITE_DATA.publications;
+        pubs.forEach((pub, i) => {
+            const item = document.createElement('div');
+            item.className = 'pub-item pub-collapsible' + (i >= 3 ? ' pub-hidden' : '');
+
+            const venueLabel = pub.venueAbbr || pub.venue;
+            const badgeClass = pub.venueType === 'journal' ? 'journal' : 'conf';
+
+            // links
+            let linksHtml = '';
+            if (pub.links) {
+                Object.entries(pub.links).forEach(([name, url]) => {
+                    linksHtml += ' · <a href="' + url + '" class="pub-link" onclick="event.stopPropagation()">' + name + '</a>';
+                });
+            }
+
+            // details
+            let detailsHtml = '';
+            if (pub.details) {
+                Object.entries(pub.details).forEach(([key, val]) => {
+                    detailsHtml += '<dt>' + key + '</dt><dd>' + val + '</dd>';
+                });
+            }
+
+            // status
+            let metaText = pub.authors + ' · ' + pub.year + linksHtml;
+            if (pub.status) metaText += '（' + pub.status + '）';
+
+            item.innerHTML =
+                '<div class="pub-main" onclick="togglePub(this)">' +
+                    '<span class="pub-badge ' + badgeClass + '">' + venueLabel + '</span>' +
+                    '<div class="pub-info">' +
+                        '<p class="pub-title">' + pub.title + '</p>' +
+                        '<p class="pub-meta">' + metaText + '</p>' +
+                        (pub.doi ? '<p class="pub-doi"><i class="fas fa-external-link-alt"></i> DOI: <a href="https://doi.org/' + pub.doi + '" target="_blank" onclick="event.stopPropagation()">' + pub.doi + '</a></p>' : '') +
+                    '</div>' +
+                    '<i class="fas fa-chevron-down pub-arrow"></i>' +
+                '</div>' +
+                (detailsHtml ? '<div class="pub-abstract"><dl class="pub-details">' + detailsHtml + '</dl></div>' : '');
+            container.appendChild(item);
+        });
+
+        if (pubs.length > 3) {
+            const btn = document.getElementById('pubToggleBtn');
+            const hiddenCount = pubs.length - 3;
+            btn.textContent = 'Show All Publications (' + hiddenCount + ')';
+            btn.style.display = '';
+            initPager('#pubList', '#pubPager', 'pubToggleBtn', 10);
+        }
+    })();
+
+    /* ── 渲染项目 ── */
+    (function renderProjects() {
+        const container = document.getElementById('projectList');
+        const projects = SITE_DATA.projects;
+        projects.forEach((proj, i) => {
+            const item = document.createElement('div');
+            item.className = 'project-item' + (i >= 3 ? ' proj-hidden' : '');
+
+            item.innerHTML =
+                '<div class="project-main">' +
+                    '<span class="proj-badge">' + (proj.badge || '项目') + '</span>' +
+                    '<div class="proj-info">' +
+                        '<p class="proj-title">' + proj.title + '</p>' +
+                        '<p class="proj-meta">' + proj.date + '</p>' +
+                        '<p class="proj-desc">' + proj.desc + '</p>' +
+                    '</div>' +
+                '</div>';
+            container.appendChild(item);
+        });
+
+        if (projects.length > 3) {
+            const btn = document.getElementById('projToggleBtn');
+            const hiddenCount = projects.length - 3;
+            btn.textContent = 'Show All Projects (' + hiddenCount + ')';
+            btn.style.display = '';
+            initPager('#projectList', null, 'projToggleBtn', 10);
+        }
+    })();
+
+    /* ── 二维码弹出 ── */
+    function toggleQR(type) {
+        var overlay = document.getElementById('qrOverlay');
+        var title = document.getElementById('qrTitle');
+        var img = document.getElementById('qrImg');
+        var label = document.getElementById('qrLabel');
+        if (type === 'wechat') {
+            title.textContent = 'WeChat QR Code';
+            img.src = 'images/wechat-qr.png';
+            label.textContent = 'WeChat QR Code';
+        } else {
+            title.textContent = 'QQ QR Code';
+            img.src = 'images/qq-qr.png';
+            label.textContent = 'QQ QR Code';
+        }
+        document.getElementById('qrImg').style.display = '';
+        document.getElementById('qrPlaceholder').style.display = 'none';
+        overlay.style.display = 'flex';
+    }
+    function closeQR() {
+        document.getElementById('qrOverlay').style.display = 'none';
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeQR();
+    });
+
+    /* ── 相对时间计算 ── */
+    function relativeDate(dateStr) {
+        var target = new Date(dateStr);
+        var now = new Date();
+        var tDate = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+        var nDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        var diffDays = Math.round((nDate - tDate) / 86400000);
+        if (diffDays === 0) return 'Today';
+        if (diffDays === 1) return 'Yesterday';
+        if (diffDays <= 7) return diffDays + ' days ago';
+        var y = target.getFullYear();
+        var m = String(target.getMonth() + 1).padStart(2, '0');
+        var d = String(target.getDate()).padStart(2, '0');
+        return y + '.' + m + '.' + d;
+    }
+
+    /* ── 通用分页（支持收起按钮） ── */
+    function initPager(containerSelector, pagerSelector, toggleBtnId, pageSize) {
+        var container = document.querySelector(containerSelector);
+        var pagerEl = pagerSelector ? document.querySelector(pagerSelector) : null;
+        var toggleBtn = document.getElementById(toggleBtnId);
+        var hiddenClass = toggleBtnId === 'pubToggleBtn' ? 'pub-hidden' : (toggleBtnId === 'projToggleBtn' ? 'proj-hidden' : 'diary-hidden');
+        var hiddenCount = container.querySelectorAll('.' + hiddenClass).length;
+        if (hiddenCount === 0) {
+            if (pagerEl) {
+                var total = container.children.length;
+                if (total > pageSize) {
+                    pagerEl.style.display = '';
+                    buildPager(container, pagerEl, null, pageSize);
+                }
+            }
+            return;
+        }
+        var originalText = toggleBtn.textContent;
+        var expanded = false;
+        var pager = null;
+        var visibleCount = container.children.length - hiddenCount;
+        toggleBtn.addEventListener('click', function() {
+            if (!expanded) {
+                container.querySelectorAll('.' + hiddenClass).forEach(function(el) { el.classList.remove(hiddenClass); });
+                expanded = true;
+                if (pagerEl) {
+                    toggleBtn.style.display = 'none';
+                    var total = container.children.length;
+                    if (total > pageSize) {
+                        pagerEl.style.display = '';
+                        pager = buildPager(container, pagerEl, function() {
+                            Array.from(container.children).forEach(function(el, i) {
+                                el.style.display = '';
+                                if (i >= visibleCount) el.classList.add(hiddenClass);
+                            });
+                            pagerEl.style.display = 'none';
+                            pagerEl.innerHTML = '';
+                            toggleBtn.style.display = '';
+                            toggleBtn.textContent = originalText;
+                            container.querySelectorAll('.open').forEach(function(e) { e.classList.remove('open'); });
+                            expanded = false;
+                            pager = null;
+                        }, pageSize);
+                    }
+                } else {
+                    toggleBtn.textContent = 'Collapse';
+                }
+            } else {
+                Array.from(container.children).forEach(function(el, i) {
+                    if (i >= visibleCount) el.classList.add(hiddenClass);
+                });
+                toggleBtn.textContent = originalText;
+                expanded = false;
+            }
+        });
+    }
+
+    function buildPager(container, pagerEl, collapseCallback, pageSize) {
+        var items = Array.from(container.children);
+        var totalPages = Math.ceil(items.length / pageSize);
+        var currentPage = 1;
+        function renderPage(page) {
+            currentPage = page;
+            items.forEach(function(item, i) {
+                item.style.display = (i >= (page - 1) * pageSize && i < page * pageSize) ? '' : 'none';
+            });
+            renderPager();
+        }
+        function renderPager() {
+            pagerEl.innerHTML = '';
+            var nav = document.createElement('div');
+            nav.className = 'pager-nav';
+            if (collapseCallback) {
+                var collapseBtn = document.createElement('span');
+                collapseBtn.className = 'pager-btn pager-collapse';
+                collapseBtn.textContent = 'Collapse';
+                collapseBtn.addEventListener('click', collapseCallback);
+                nav.appendChild(collapseBtn);
+            }
+            var prev = document.createElement('span');
+            prev.className = 'pager-btn' + (currentPage === 1 ? ' disabled' : '');
+            prev.textContent = 'Prev';
+            if (currentPage > 1) prev.addEventListener('click', function() { renderPage(currentPage - 1); });
+            nav.appendChild(prev);
+            var range = 2;
+            var start = Math.max(1, currentPage - range);
+            var end = Math.min(totalPages, currentPage + range);
+            if (start > 1) {
+                nav.appendChild(makePageBtn(1));
+                if (start > 2) {
+                    var dots = document.createElement('span');
+                    dots.className = 'pager-dots';
+                    dots.textContent = '...';
+                    nav.appendChild(dots);
+                }
+            }
+            for (var i = start; i <= end; i++) {
+                nav.appendChild(makePageBtn(i));
+            }
+            if (end < totalPages) {
+                if (end < totalPages - 1) {
+                    var dots2 = document.createElement('span');
+                    dots2.className = 'pager-dots';
+                    dots2.textContent = '...';
+                    nav.appendChild(dots2);
+                }
+                nav.appendChild(makePageBtn(totalPages));
+            }
+            var next = document.createElement('span');
+            next.className = 'pager-btn' + (currentPage === totalPages ? ' disabled' : '');
+            next.textContent = 'Next';
+            if (currentPage < totalPages) next.addEventListener('click', function() { renderPage(currentPage + 1); });
+            nav.appendChild(next);
+            pagerEl.appendChild(nav);
+            function makePageBtn(p) {
+                var btn = document.createElement('span');
+                btn.className = 'pager-btn' + (p === currentPage ? ' active' : '');
+                btn.textContent = p;
+                if (p !== currentPage) btn.addEventListener('click', function() { renderPage(p); });
+                return btn;
+            }
+        }
+        renderPage(1);
+        return { renderPage: renderPage };
+    }
+
+    /* ── 展开 / 收起 ── */
+    function toggleEntry(headerEl) {
+        var entry = headerEl.closest('.diary-entry');
+        var isOpen = entry.classList.contains('open');
+        document.querySelectorAll('.diary-entry.open').forEach(function(e) { e.classList.remove('open'); });
+        if (!isOpen) entry.classList.add('open');
+    }
+    function togglePub(mainEl) {
+        var item = mainEl.closest('.pub-collapsible');
+        var isOpen = item.classList.contains('open');
+        document.querySelectorAll('.pub-collapsible.open').forEach(function(e) { e.classList.remove('open'); });
+        if (!isOpen) item.classList.add('open');
+    }
+    </script>
+</body>
+</html>
