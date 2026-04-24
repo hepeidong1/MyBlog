@@ -122,8 +122,7 @@ const SITE_DATA = {
       "doi": "10.1016/j.apm.2025.116383",
       "links": {
         "PDF": "/articles/article2/2.pdf",
-        "Code": "/articles/article2/SiMlDCS_CODE.zip",
-        "Supplementary": "/articles/article2/Supplementary Material (AMMOD-D-25-02519 R1).docx"
+        "Code": "/articles/article2/SiMlDCS_CODE.zip"
       },
       "details": {
         "Journal": "Applied Mathematical Modelling, 150 (2026) 116383",
