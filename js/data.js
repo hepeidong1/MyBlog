@@ -9,7 +9,6 @@ const SITE_DATA = {
       "Optimization Algorithm",
       "Path Planning",
       "UAV Swarm Control",
-      "Particle Swarm Optimization",
       "Formation Control",
       "Distributed System"
     ],
